@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import tasks, notes
+from app.api import tasks, notes, auth
 from app.db import create_tables
 # Import models to ensure they're registered with Base
 from app.models import task_model, user, note_model
@@ -23,3 +23,4 @@ def health_check():
 # Include tasks router
 app.include_router(tasks.router, prefix="/tasks", tags=["Tasks"])
 app.include_router(notes.router, prefix="/notes", tags=["Notes"])   
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
