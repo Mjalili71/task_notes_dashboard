@@ -8,7 +8,7 @@ A modern FastAPI backend for managing Tasks and Notes with full CRUD operations.
 - 📝 **Note Taking** - Manage notes with title and content
 - 🔗 **User Ready** - Database schema ready for user authentication
 - 📚 **Auto Documentation** - Interactive Swagger UI at `/docs`
-- 🗄️ **SQLite Database** - Easy setup with automatic table creation
+- 🗄️ **PostgreSQL Database** - Production-ready with Docker setup
 - ⚡ **Fast API** - Built with FastAPI for high performance
 
 ## 🛠️ Tech Stack
@@ -16,14 +16,16 @@ A modern FastAPI backend for managing Tasks and Notes with full CRUD operations.
 - **FastAPI** - Modern web framework
 - **SQLAlchemy** - Database ORM
 - **Pydantic** - Data validation
-- **SQLite** - Database (easily switchable to PostgreSQL)
 - **Uvicorn** - ASGI server
+- **PostgreSQL** - Production database
+- **Alembic** - Database migration management
 
 ## 📦 Installation
 
 ### Prerequisites
 - Python 3.12+
 - Git
+- Docker (for PostgreSQL)
 
 ### Setup
 
@@ -44,10 +46,46 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. **Run the application**
+4. **Setup PostgreSQL with Docker**
 ```bash
-uvicorn main:app --reload
+docker run --name postgres-db \
+  -e POSTGRES_DB=task_notes_dashboard \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=mypassword123 \
+  -p 5432:5432 \
+  -d postgres:15
 ```
+
+5. **Setup environment variables**
+Create `.env` file:
+```bash
+DATABASE_URL=postgresql://postgres:mypassword123@localhost:5432/task_notes_dashboard
+SECRET_KEY=your-secret-key-here
+```
+
+6. **Run database migrations**
+```bash
+alembic upgrade head
+```
+```
+## 🗄️ Database Management
+
+### Migrations
+```bash
+# Create new migration after model changes
+alembic revision --autogenerate -m "Description of changes"
+
+# Apply migrations
+alembic upgrade head
+
+# View migration history
+alembic history
+
+# Rollback to previous migration
+alembic downgrade -1
+```
+
+
 
 The API will be available at `http://localhost:8000`
 
@@ -136,16 +174,56 @@ curl "http://localhost:8000/tasks/"
 - `created_at` - Auto timestamp
 - `updated_at` - Auto timestamp
 
-## 🚀 Future Enhancements
+## 🗄️ Database Management
 
-- [ ] JWT Authentication
-- [ ] User registration and login
-- [ ] PostgreSQL support
+### Alembic Migrations
+```bash
+# Create new migration after model changes
+alembic revision --autogenerate -m "Description of changes"
+
+# Apply migrations
+alembic upgrade head
+
+# View migration history  
+alembic history
+
+# Rollback to previous migration
+alembic downgrade -1
+```
+
+### PostgreSQL Commands
+```bash
+# Connect to database
+docker exec -it postgres-db psql -U postgres -d task_notes_dashboard
+
+# View tables
+\dt
+
+# View table structure
+\d users
+
+# Exit
+\q
+```
+
+## 🚀 Features Status
+
+### ✅ **Completed Features:**
+- ✅ **JWT Authentication** - Complete with register/login
+- ✅ **User registration and login** - Working endpoints  
+- ✅ **PostgreSQL support** - Production database with Alembic
+- ✅ **Protected Endpoints** - JWT-based authentication
+- ✅ **Database Migrations** - Alembic version control
+
+### 🔄 **Future Enhancements:**
 - [ ] Task categories and tags
 - [ ] Due date reminders
 - [ ] API rate limiting
-- [ ] Docker containerization
+- [ ] Docker containerization (full app)
 - [ ] Unit tests with pytest
+- [ ] Email notifications
+- [ ] File attachments
+- [ ] Advanced search and filtering
 
 ## 📝 Contributing
 
