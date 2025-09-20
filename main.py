@@ -8,7 +8,7 @@ from app.models import task_model, user, note_model
 app = FastAPI(title="Task Notes Dashboard")
 
 # Create database tables
-create_tables()
+#create_tables()
 
 # Root endpoint
 @app.get("/", tags=["Health"])
