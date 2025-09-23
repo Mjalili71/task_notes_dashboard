@@ -3,7 +3,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
-load_dotenv()
+
+# Only load .env file if not in container (for local development)
+if not os.getenv("DOCKER_CONTAINER"):
+    load_dotenv()
+
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
 
