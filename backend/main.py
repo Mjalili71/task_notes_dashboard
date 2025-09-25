@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api import tasks, notes, auth
 from app.db import create_tables
 # Import models to ensure they're registered with Base
@@ -6,6 +7,15 @@ from app.models import task_model, user, note_model
 
 
 app = FastAPI(title="Task Notes Dashboard")
+
+# Configure CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Frontend URLs
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Create database tables
 #create_tables()
